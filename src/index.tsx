@@ -16,9 +16,9 @@ if (rootElement) {
 
   root.render(
     <React.StrictMode>
-      <BrowserRouter basename={baseUrl ?? "/"}>
-        <App />
-      </BrowserRouter>
+      {/* <BrowserRouter basename={baseUrl ?? "/"}> */}
+      <App />
+      {/* </BrowserRouter> commented after AppRoutes has been removed */}
     </React.StrictMode>
   );
 }

@@ -97,11 +97,11 @@ export class NavMenu extends Component<NavMenuProps, NavMenuState> {
             </ul>
           ) : (
             <ul className="navbar-nav flex-grow">
-              <NavItem>
+              {/* <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/profile">
                   Profile
                 </NavLink>
-              </NavItem>
+              </NavItem> */}
               {/* <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/oldprofile">
                   Old-Profile

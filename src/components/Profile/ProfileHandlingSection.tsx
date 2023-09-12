@@ -19,8 +19,10 @@ import {
   GetCurrentUserName,
 } from "../../services/authservice";
 import { IChangePassword, IChangeEmail } from "../../typings/UserProps";
+import { useNavigate } from "react-router-dom";
 
 export default function HandlingProfileSection() {
+  const navigate = useNavigate();
   const [currentPasswordInput, setCurrentPasswordInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordRepeatInput, setPasswordRepeatInput] = useState<string>("");
@@ -33,7 +35,7 @@ export default function HandlingProfileSection() {
     useState<boolean>(false);
   const [isEmailChangeError, setEmailChangeError] = useState<boolean>(false);
 
-  const handlePasswordChangeValues = (e: any) => {
+  const handlePasswordChangeValues = async (e: any) => {
     e.preventDefault();
     if (
       passwordInput !== passwordRepeatInput ||
@@ -49,9 +51,12 @@ export default function HandlingProfileSection() {
         currentPassword: currentPasswordInput,
         newPassword: passwordInput,
       };
-      ChangePasswordHandler(props);
+      var result = await ChangePasswordHandler(props);
+      if (result !== null) {
+        navigate("/");
+      }
       setPasswordChangeError(false);
-      //   window.location.reload();
+      window.location.reload();
     }
   };
   const handleEmailChangeValues = (e: any) => {

@@ -28,9 +28,7 @@ export async function LoginHandler(username: string, password: string) {
 }
 
 export function LogoutHandler() {
-  let navigate = useNavigate();
   localStorage.removeItem("user");
-  navigate("/");
 }
 
 export async function RegisterHandler(
@@ -85,14 +83,14 @@ export async function ChangeEmailHandler(props: IChangeEmail) {
       console.log("err: ", err.response.data);
       console.log("err: ", err.response.status);
     });
-  return;
 }
+
 export async function ChangePasswordHandler(props: IChangePassword) {
   const { username, currentPassword, newPassword } = props;
   console.log("username: ", username);
   console.log("currentPassword: ", currentPassword);
   console.log("newPassword: ", newPassword);
-  return axios
+  return await axios
     .put(Constants.API_URL_UPDATE_PASSWORD, {
       UserName: username,
       CurrentPassword: currentPassword,
@@ -102,12 +100,10 @@ export async function ChangePasswordHandler(props: IChangePassword) {
       console.log("response.data.status: ", response.status);
       if (response.status === 200) {
         LogoutHandler();
-        return;
       }
       return response.data;
     })
-    .catch((err) => {
-      console.log("err: ", err.response.data);
-      console.log("err: ", err.response.status);
+    .catch(() => {
+      return null;
     });
 }

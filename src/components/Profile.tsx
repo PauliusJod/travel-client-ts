@@ -8,14 +8,9 @@ import {
   ListGroupItem,
 } from "react-bootstrap";
 import HandlingProfileSection from "./Profile/ProfileHandlingSection";
-import backgroundImage from "../images/background-image.jpg";
 import { HandleProfileItemsSection } from "./Profile/ProfileHandlingItemsSection";
 
 export default function Profile() {
-  const [isGroupCreateVisible, setGroupCreateVisible] =
-    useState<boolean>(false);
-  const [choosenGroupId, setChoosenGroupId] = useState<number>(-1);
-  //   const [groupData, setGroupData] = useState<IGroupGet[]>([]);
   return (
     <Container>
       <Row>
