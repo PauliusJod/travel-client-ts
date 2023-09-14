@@ -1,13 +1,11 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import "./style.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
 
-const baseUrl = document.getElementsByTagName("base")[0]?.getAttribute("href");
 const rootElement = document.getElementById("root");
 
 if (rootElement) {

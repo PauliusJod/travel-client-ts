@@ -1,16 +1,8 @@
+// eslint-disable-next-line
 import React from "react";
 import axios from "axios";
-import Constants from "../utils/Constants";
-import { IChangeEmail, IChangePassword } from "../typings/UserProps";
-import jwt_decode from "jwt-decode";
-import {
-  useFetcher,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import { GetCurrentUserId, GetCurrentUserToken } from "./authservice";
-import { IGetRoute, IRouteImage } from "../typings/RouteProps";
+import { GetCurrentUserId } from "./authservice";
+import { IGetRoute } from "../typings/RouteProps";
 
 export async function GetAllOwnedItemsHandler() {
   try {

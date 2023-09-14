@@ -1,23 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Pagination } from "react-bootstrap";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { GetAllOwnedItemsHandler } from "../../services/profileservice";
 import { IGetRoute } from "../../typings/RouteProps";
-
+import { PrivateRouteView } from "./ProfileRouteView";
+import { containerStyle, cardStyle, defaultImage, Loadera } from "../../utils/styleConstants";
+import ProfilePagination from "./ProfilePagination";
+interface ChildComponentProps {
+  sendDataToParent: (data: IGetRoute | undefined) => void;
+  sendDataBack: IGetRoute | undefined;
+}
 const ITEMS_PER_PAGE = 9;
-export function HandleProfileItemsSection() {
+export function HandleProfileItemsSection({ sendDataToParent, sendDataBack }: ChildComponentProps) {
   const [ispageLoaded, setPageLoad] = useState<boolean>(false);
   const [data, setData] = useState<IGetRoute[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [routeViewData, setRouteViewData] = useState<IGetRoute | undefined>();
+  const [aaa, setaaa] = useState<string>("");
+  useEffect(() => {
+    getAllOwnedItems();
+  }, []);
+  useEffect(() => {
+    setPageLoad(true);
+    setRouteViewData(sendDataBack);
+  }, [sendDataBack]);
 
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
-
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
+  useEffect(() => {
+    sendDataToParent(routeViewData);
+  }, [routeViewData]);
   const getAllOwnedItems = async () => {
     setPageLoad(false);
     const response = await GetAllOwnedItemsHandler();
@@ -25,65 +34,55 @@ export function HandleProfileItemsSection() {
       return;
     }
     if (response !== null) {
-      console.log(response);
       setData(response);
       setTimeout(() => {
         setPageLoad(true);
-      }, 1500);
+      }, 1000);
       return;
     }
-    return;
   };
-  useEffect(() => {
-    getAllOwnedItems();
-  }, []);
+  const handleRouteOpening = (item: IGetRoute | undefined, index: number) => {
+    setRouteViewData(item);
+  };
+  /* Pagination */
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const memoizedSetaaa = useMemo(() => setaaa, []);
   return (
     <>
-      {ispageLoaded ? (
-        <></>
-      ) : (
-        <div className="d-flex justify-content-md-center">
-          <div className="spinner"></div>
-        </div>
-      )}
+      {ispageLoaded ? <></> : <Loadera />}
       <Container
         fluid
-        style={{
-          backgroundImage: `url("http://localhost:3000/static/media/background-image-light-gray.b9c14666961e2f8fac7f.jpg")`, // Replace with your image path
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
+        // style={{ display: routeViewData === undefined ? "block" : "none", ...containerStyle }}
       >
-        <Row
-          xs={1}
-          sm={2}
-          md={3}
-          style={{ display: ispageLoaded ? "flex" : "none" }}
-        >
+        <Button onClick={() => memoizedSetaaa("sss")}>sss</Button>
+        <Button onClick={() => memoizedSetaaa("fff")}>sss</Button>
+        <p>sdssdds</p>
+        <Row xs={1} sm={2} md={3} style={{ display: ispageLoaded ? "flex" : "none" }}>
           {currentItems.length !== 0 ? (
             currentItems.map((item, index) => (
-              <Col key={index}>
-                <Card
-                  style={{
-                    backgroundImage: `url("http://localhost:3000/static/media/background-image-sandy.3f7a4591118c0fba6c30.jpg")`, // Replace with your image path
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
-                  }}
-                >
+              <Col key={index} style={{ paddingTop: index % 2 ? "15px" : "0px" }}>
+                <Card style={cardStyle}>
                   {item.rImagesUrl.length !== 0 &&
                   item.rImagesUrl[0].rImagesUrlLink !== undefined ? (
                     <Card.Img
                       style={{ maxHeight: "200px", objectFit: "cover" }}
                       src={item.rImagesUrl[0].rImagesUrlLink}
                       alt={`Image ${index + 1}`}
+                      onClick={() => handleRouteOpening(item, index)}
                     />
                   ) : (
                     <Card.Img
                       style={{ maxHeight: "200px", objectFit: "cover" }}
-                      src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8dHJhdmVsfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
+                      src={defaultImage}
                       alt={`Image ${index + 1}`}
+                      onClick={() => handleRouteOpening(item, index)}
                     />
                   )}
 
@@ -97,17 +96,13 @@ export function HandleProfileItemsSection() {
             <></>
           )}
         </Row>
-        <Pagination style={{ display: ispageLoaded ? "flex" : "none" }}>
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <Pagination.Item
-              key={index}
-              active={index + 1 === currentPage}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-        </Pagination>
+
+        <ProfilePagination
+          ispageLoaded={ispageLoaded}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+        />
       </Container>
     </>
   );

@@ -1,22 +1,16 @@
 import React, { useState } from "react";
 import { Alert } from "react-bootstrap";
-import {
-  LoginHandler,
-  LogoutHandler,
-  GetCurrentUserToken,
-} from "../services/authservice";
+import { LoginHandler } from "../services/authservice";
 import { useNavigate } from "react-router-dom";
 
 import {
   Button,
-  Col,
   Form,
   InputGroup,
   Row,
   Container,
   Card,
 } from "react-bootstrap";
-import axios from "axios";
 
 const alertStyle = { fontSize: "14px", padding: "5px" };
 

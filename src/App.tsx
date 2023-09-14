@@ -7,14 +7,36 @@ import "./custom.css";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 function App() {
-  const Home = lazy(() =>
-    import("./components/Home").then((module) => ({ default: module.Home }))
+  // const Home = lazy(() =>
+  //   import("./components/Home").then((module) => ({ default: module.Home }))
+  // );
+  const Home = lazy(
+    () =>
+      new Promise<{ default: React.ComponentType<any> }>((resolve) => {
+        setTimeout(() => {
+          import("./components/Home").then((module) => {
+            resolve({ default: module.Home });
+          });
+        }, 1000);
+      })
   );
-  const Profile = lazy(() =>
-    import("./components/Profile").then((module) => ({
-      default: module.default,
-    }))
+
+  // const Profile = lazy(() =>
+  //   import("./components/Profile").then((module) => ({
+  //     default: module.default,
+  //   }))
+  // );
+  const Profile = lazy(
+    () =>
+      new Promise<{ default: React.ComponentType<any> }>((resolve) => {
+        setTimeout(() => {
+          import("./components/Profile").then((module) => {
+            resolve({ default: module.default });
+          });
+        }, 1000);
+      })
   );
+
   const Login = lazy(() =>
     import("./components/Login").then((module) => ({ default: module.default }))
   );
@@ -58,7 +80,7 @@ function App() {
 }
 
 export default App;
-
+// eslint-disable-next-line
 {
   /* {AppRoutes.map((route, index) => {
             const { element, ...rest } = route;

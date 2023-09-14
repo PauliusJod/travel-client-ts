@@ -2,12 +2,7 @@ import axios from "axios";
 import Constants from "../utils/Constants";
 import { IChangeEmail, IChangePassword } from "../typings/UserProps";
 import jwt_decode from "jwt-decode";
-import {
-  useFetcher,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+
 export async function LoginHandler(username: string, password: string) {
   return axios
     .post(Constants.API_URL_LOGIN, {
@@ -18,7 +13,7 @@ export async function LoginHandler(username: string, password: string) {
       if (response.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-      console.log(response.data.accessToken);
+      // console.log(response.data.accessToken);
       return response;
     })
     .catch((err) => {
@@ -31,11 +26,7 @@ export function LogoutHandler() {
   localStorage.removeItem("user");
 }
 
-export async function RegisterHandler(
-  username: string,
-  email: string,
-  password: string
-) {
+export async function RegisterHandler(username: string, email: string, password: string) {
   return axios.post(Constants.API_URL_REGISTER, {
     username,
     email,
@@ -52,8 +43,7 @@ export function GetCurrentUserName() {
   const user = JSON.parse(userFromLocalStorage);
   const userInfo = jwt_decode(user.accessToken) as any;
 
-  const userName =
-    userInfo["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+  const userName = userInfo["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
 
   return userName as string;
 }
@@ -65,8 +55,8 @@ export function GetCurrentUserId() {
 }
 export async function ChangeEmailHandler(props: IChangeEmail) {
   const { username, newEmail } = props;
-  console.log("username: ", username);
-  console.log("newEmail: ", newEmail);
+  // console.log("username: ", username);
+  // console.log("newEmail: ", newEmail);
   return axios
     .put(Constants.API_URL_UPDATE_EMAIL, {
       UserName: username,
@@ -87,9 +77,9 @@ export async function ChangeEmailHandler(props: IChangeEmail) {
 
 export async function ChangePasswordHandler(props: IChangePassword) {
   const { username, currentPassword, newPassword } = props;
-  console.log("username: ", username);
-  console.log("currentPassword: ", currentPassword);
-  console.log("newPassword: ", newPassword);
+  // console.log("username: ", username);
+  // console.log("currentPassword: ", currentPassword);
+  // console.log("newPassword: ", newPassword);
   return await axios
     .put(Constants.API_URL_UPDATE_PASSWORD, {
       UserName: username,
